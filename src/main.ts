@@ -1,26 +1,36 @@
 import * as core from '@actions/core'
-import { wait } from './wait'
+import os from 'os'
+import { installVCluster } from './vcluster'
+import { installKubectl } from './kubectl'
 
-/**
- * The main function for the action.
- * @returns {Promise<void>} Resolves when the action is complete.
- */
 export async function run(): Promise<void> {
+  const runnerPlatform: string = os.platform()
+  const architecture: string = os.arch()
+
   try {
-    const ms: string = core.getInput('milliseconds')
+    core.startGroup('Install vcluster CLI')
+    const version: string = core.getInput('version') || 'latest'
+    await installVCluster(runnerPlatform, architecture, version)
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      core.setFailed(error.message)
+    }
+  } finally {
+    core.endGroup()
+  }
 
-    // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-    core.debug(`Waiting ${ms} milliseconds ...`)
-
-    // Log the current timestamp, wait, then log the new timestamp
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
-
-    // Set outputs for other workflow steps to use
-    core.setOutput('time', new Date().toTimeString())
-  } catch (error) {
-    // Fail the workflow run if an error occurs
-    if (error instanceof Error) core.setFailed(error.message)
+  const kubectlInstallEnabled = core.getBooleanInput('kubectl-install')
+  if (kubectlInstallEnabled) {
+    try {
+      core.startGroup('Install kubectl')
+      const kubectlVersion = core.getInput('kubectl-version') || 'latest'
+      await installKubectl(runnerPlatform, architecture, kubectlVersion)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        core.setFailed(error.message)
+      }
+    } finally {
+      core.endGroup()
+    }
   }
 }

@@ -40,21 +40,41 @@ jobs:
         id: npm-ci-test
         run: npm run ci-test
 
-  test-action:
-    name: GitHub Actions Test
-    runs-on: ubuntu-latest
-
+  test-vcluster:
+    name: Install vcluster CLI Test
+    strategy:
+      matrix:
+        os:
+          - windows-latest
+          - ubuntu-latest
+          - macos-latest
+        version:
+          - v0.16.0
+          - 0.16.0
+          - latest
+          - ~
+        kubectl-install:
+          - true
+          - false
+        kubectl-version:
+          - v1.28.2
+          - 1.28.2
+          - latest
+          - ~
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         id: checkout
         uses: actions/checkout@v4
 
-      - name: Test Local Action
+      - name: Test Setup vCluster Action
         id: test-action
         uses: ./
         with:
-          milliseconds: 1000
+          version: ${{ matrix.version }}
+          kubectl-install: ${{ matrix.kubectl-install }}
+          kubectl-version: ${{ matrix.kubectl-version }}
 
-      - name: Print Output
-        id: output
-        run: echo "${{ steps.test-action.outputs.time }}"
+      - name: Print Version
+        id: print-version
+        run: vcluster version

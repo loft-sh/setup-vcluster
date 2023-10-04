@@ -1,19 +1,20 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
-
-# Define your inputs here.
+name: vCluster CLI Install
+author: loft.sh
+description: Installs the vcluster CLI
 inputs:
-  milliseconds:
-    description: 'Your input description here'
-    required: true
-    default: '1000'
-
-# Define your outputs here.
-outputs:
-  time:
-    description: 'Your output description here'
-
+  version:
+    description: 'The version of vcluster to install'
+    required: false
+    default: 'latest'
+  kubectl-install:
+    description: 'Install kubectl if not already installed'
+    required: false
+    default: 'true'
+  kubectl-version:
+    description: 'The version of the kubectl to install'
+    required: false
+    default: 'latest'
 runs:
   using: node20
-  main: dist/index.js
+  main: 'dist/main/index.js'
+  post: 'dist/cleanup/index.js'

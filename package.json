@@ -1,21 +1,20 @@
 {
-  "name": "typescript-action",
-  "description": "GitHub Actions TypeScript template",
+  "name": "setup-vcluster",
+  "description": "GitHub Action to Install vCLuster CLI",
   "version": "0.0.0",
-  "author": "",
   "private": true,
-  "homepage": "https://github.com/actions/typescript-action",
+  "homepage": "https://github.com/loft-sh/setup-vcluster",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/loft-sh/setup-vcluster.git"
   },
   "bugs": {
-    "url": "https://github.com/actions/typescript-action/issues"
+    "url": "https://github.com/loft-sh/setup-vcluster/issues"
   },
   "keywords": [
     "actions",
-    "node",
-    "setup"
+    "loft",
+    "vcluster"
   ],
   "exports": {
     ".": "./dist/index.js"
@@ -29,8 +28,9 @@
     "format:write": "prettier --write **/*.ts",
     "format:check": "prettier --check **/*.ts",
     "lint": "npx eslint . -c ./.github/linters/.eslintrc.yml",
-    "package": "ncc build src/index.ts --license licenses.txt",
-    "package:watch": "npm run package -- --watch",
+    "package": "npm run package:main && npm run package:cleanup",
+    "package:main": "ncc build src/index.ts --source-map --license licenses.txt --out dist/main",
+    "package:cleanup": "ncc build src/cleanup.ts --source-map --license licenses.txt --out dist/cleanup",
     "test": "(jest && make-coverage-badge --output-path ./badges/coverage.svg) || make-coverage-badge --output-path ./badges/coverage.svg",
     "all": "npm run format:write && npm run lint && npm run test && npm run package"
   },
@@ -65,7 +65,10 @@
     ]
   },
   "dependencies": {
-    "@actions/core": "^1.10.1"
+    "@actions/core": "^1.10.1",
+    "@actions/exec": "^1.1.1",
+    "@actions/io": "^1.1.3",
+    "@actions/tool-cache": "^2.0.1"
   },
   "devDependencies": {
     "@types/jest": "^29.5.5",
