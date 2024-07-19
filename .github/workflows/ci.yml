@@ -49,8 +49,8 @@ jobs:
           - ubuntu-latest
           - macos-latest
         version:
-          - v0.16.0
-          - 0.16.0
+          - v0.19.6
+          - 0.20.0-beta.12
           - latest
           - ~
         kubectl-install:
@@ -78,3 +78,7 @@ jobs:
       - name: Print Version
         id: print-version
         run: vcluster version
+
+      - name: Print Help
+        id: print-help
+        run: vcluster --help
