@@ -1,20 +1,36 @@
 name: vCluster CLI Install
 author: loft.sh
-description: Installs the vcluster CLI
+description: Installs the vCluster CLI
 inputs:
   version:
-    description: 'The version of vcluster to install'
+    description: "The version of vCluster to install"
     required: false
-    default: 'latest'
+    default: "latest"
+  url:
+    description: "The vCluster Platform URL"
+    required: false
+    default: ""
+  access-key:
+    description: "The vCluster Platform Access Key"
+    required: false
+    default: ""
+  insecure:
+    description: "Allow login into an insecure vCluster Platform instance (default false)"
+    required: false
+    default: "false"
+  docker-login:
+    description: "If true, will log into the docker image registries the user has image pull secrets for (default true)"
+    required: false
+    default: "true"
   kubectl-install:
-    description: 'Install kubectl if not already installed'
+    description: "Install kubectl if not already installed"
     required: false
-    default: 'true'
+    default: "true"
   kubectl-version:
-    description: 'The version of the kubectl to install'
+    description: "The version of the kubectl to install"
     required: false
-    default: 'latest'
+    default: "latest"
 runs:
   using: node20
-  main: 'dist/main/index.js'
-  post: 'dist/cleanup/index.js'
+  main: "dist/main/index.js"
+  post: "dist/cleanup/index.js"
