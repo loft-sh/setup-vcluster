@@ -6,7 +6,7 @@ export function binaryName(platform: string, name: string): string {
   return isWindows(platform) ? `${name}.exe` : name
 }
 
-const platformUrlMapping: { [key: string]: string } = {
+const platformUrlMapping: Record<string, string> = {
   linux: 'linux',
   darwin: 'darwin',
   win32: 'windows'
@@ -19,7 +19,7 @@ export function getPlatform(platform: string): string {
   return platformUrlMapping[platform]
 }
 
-const architectureMapping: { [key: string]: string } = {
+const architectureMapping: Record<string, string> = {
   amd64: 'amd64',
   arm64: 'arm64',
   x64: 'amd64'

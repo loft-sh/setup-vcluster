@@ -48,6 +48,7 @@ export async function getLatestVersion(): Promise<string> {
       redirect: 'manual'
     }
   )
+
   const redirectUrl = response.headers.get('location')
   if (redirectUrl == null) {
     throw new Error('Error fetching latest version')
@@ -68,18 +69,20 @@ export async function installVCluster(
 ): Promise<string> {
   const cliName = binaryName(platform, 'vcluster')
 
-  core.info(`Checking for cached vcluster: ${version}`)
+  core.info(`Checking for cached vCluster: ${version}`)
+
   const cachedDir = tc.find(cliName, version)
   if (cachedDir) {
-    core.info(`Cached vcluster found: ${version}`)
+    core.info(`Cached vCluster found: ${version}`)
     core.addPath(cachedDir)
     return path.join(cachedDir, cliName)
   }
 
-  core.info(`Downloading vcluster:`)
+  core.info(`Downloading vCluster:`)
   core.info(`- platform:     ${platform}`)
   core.info(`- architecture: ${architecture}`)
   core.info(`- version:      ${version}`)
+
   const vclusterUrl = await binaryUrl(platform, architecture, version)
   const downloadDir = await tc.downloadTool(vclusterUrl)
   const cliDir = await tc.cacheFile(
@@ -95,7 +98,8 @@ export async function installVCluster(
     fs.chmodSync(cliPath, 0o555)
   }
 
-  core.info(`Successfully downloaded vcluster: ${version}`)
+  core.info(`Successfully downloaded vCluster: ${version}`)
   core.addPath(cliDir)
+
   return path.join(cliDir, cliName)
 }

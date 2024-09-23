@@ -5,7 +5,7 @@ import path from 'path'
 
 async function run(): Promise<void> {
   try {
-    core.startGroup('Remove vcluster Configuration')
+    core.startGroup('Remove vCluster Configuration')
     const homeDir = homedir()
     await io.rmRF(path.join(homeDir, '.vcluster'))
   } catch (error: unknown) {
