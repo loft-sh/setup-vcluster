@@ -66,6 +66,29 @@ jobs:
         run: kubectl --version --client
 ```
 
+### Example: Use a specific vCluster version and login to the platform
+
+```yaml
+name: vcluster version
+on:
+  push:
+    branches:
+      - 'main'
+jobs:
+  whoami:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install vCluster CLI
+        uses: loft-sh/setup-vcluster@main
+        with:
+          url: ${{ secrets.VCLUSTER_PLATFORM_URL }}
+          access-key: ${{ secrets.VCLUSTER_PLATFORM_ACCESS_KEY }}
+      - name: Show Version
+        run: vcluster --version
+      - name: Show current user
+        run: vcluster platform get current-user
+```
+
 ## Customizing
 
 ### inputs
@@ -74,14 +97,14 @@ The following inputs can be used as `step.with` keys.
 
 <!-- markdownlint-disable MD013 -->
 
-| Name              | Type    | Description                                                                                                                                            |
-| ----------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `version`         | String  | The version of vcluster CLI to install. See [Loft Releases](https://github.com/loft-sh/vcluster/releases) for available versions. Defaults to latest.  |
-| `kubectl-install` | Boolean | Install kubectl if not already installed. Defaults to true.                                                                                            |
-| `url`             | String  | The URL used to access your Loft instance.                                                                                                             |
-| `access-key`      | String  | A Loft access key used for logging in through the CLI. See [Access Keys](https://loft.sh/docs/auth/access-keys) for help generating a Loft access key. |
-| `insecure`        | Boolean | Allow login into an insecure loft instance                                                                                                             |
-| `docker-login`    | Boolean | If true, will log into the docker image registries the user has image pull secrets for (default true)                                                  |
-| `kubectl-version` | String  | The version of the kubectl to install. Defaults to latest stable version.                                                                              |
+| Name              | Type    | Description                                                                                                                                                                                              |
+| ----------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `version`         | String  | The version of vCluster CLI to install. See [vCluster Releases](https://github.com/loft-sh/vcluster/releases) for available versions. Defaults to latest.                                                |
+| `url`             | String  | The URL used to access your vCluster Platform instance.                                                                                                                                                  |
+| `access-key`      | String  | A vCluster Platform access key used for logging in through the CLI. See [Access Keys](https://vcluster.com/docs/platform/users/advanced/access-keys) for help generating a vCluster Platform access key. |
+| `insecure`        | Boolean | Allow login into an insecure vCluster Platform instance                                                                                                                                                  |
+| `docker-login`    | Boolean | If true, will log into the Docker image registries the user has image pull secrets for (default true)                                                                                                    |
+| `kubectl-install` | Boolean | Install kubectl if not already installed. Defaults to true.                                                                                                                                              |
+| `kubectl-version` | String  | The version of the kubectl to install. Defaults to latest stable version.                                                                                                                                |
 
 <!-- markdownlint-enable MD013 -->
